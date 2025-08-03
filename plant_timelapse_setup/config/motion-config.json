@@ -1,0 +1,5 @@
+{
+    "notify_url": "https://example.com/motion-alert",
+    "trigger_classes": ["human", "large_object"],
+    "confidence_threshold": 0.5
+}
