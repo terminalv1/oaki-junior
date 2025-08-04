@@ -1,4 +1,2 @@
-*/5 * * * * /home/pi/timelapse/capture.sh
-0 0 * * * /home/pi/timelapse/backup.sh
-
-*/10 * * * * /home/pi/timelapse/log_system.sh
+*/5 * * * * /usr/bin/python3 /home/pi/power/log_to_influx.py
+0 23 * * * /usr/bin/python3 /home/pi/power/daily_summary.py

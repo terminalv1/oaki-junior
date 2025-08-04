@@ -1,0 +1,7 @@
+{
+  "warn_threshold": 20,
+  "shutdown_threshold": 10,
+  "telegram_alert": true,
+  "http_alert": true,
+  "notify_url": "https://example.com/battery-alert"
+}

@@ -1,25 +1,30 @@
 #!/bin/bash
 
-echo "🔧 Installing required packages..."
+echo "🌿 Installing dependencies..."
 sudo apt update
-sudo apt install -y python3 python3-pip python3-flask libcamera-apps fswebcam
+sudo apt install -y python3-pip python3-opencv python3-requests python3-flask git libcamera-apps influxdb grafana
 
-echo "📦 Installing Python packages..."
-pip3 install requests opencv-python-headless
+echo "📦 Installing Python modules..."
+pip3 install pijuice flask
 
-echo "📁 Creating directories..."
-mkdir -p ~/timelapse ~/motion ~/web_ui ~/config
+echo "🔧 Enabling services..."
+sudo systemctl enable influxdb
+sudo systemctl start influxdb
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
 
-echo "📂 Copying files..."
-cp timelapse/*.sh ~/timelapse/
-cp motion/motion_detect.py ~/motion/
-cp web_ui/server.py ~/web_ui/
-cp config/motion-config.json ~/config/
+echo "🛠️ Setting up systemd services..."
+sudo cp systemd/*.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable motion.service
+sudo systemctl enable webui.service
+sudo systemctl start motion.service
+sudo systemctl start webui.service
+
+echo "⏱️ Installing cron jobs..."
 crontab config/crontab.txt
 
-echo "🛠️ Setting executable permissions..."
-chmod +x ~/timelapse/*.sh ~/motion/motion_detect.py ~/web_ui/server.py
+echo "📁 Creating folders..."
+mkdir -p ~/timelapse/videos ~/motion ~/config ~/power ~/web_ui
 
-echo "✅ Setup complete. You can now:"
-echo "Start web server: python3 ~/web_ui/server.py"
-echo "Start motion detection: python3 ~/motion/motion_detect.py &"
+echo "✅ Setup complete. Access web UI at: http://<pi-ip>:8000 and Grafana at http://<pi-ip>:3000"

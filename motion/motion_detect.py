@@ -3,10 +3,14 @@ import cv2
 import numpy as np
 import time
 import requests
+import subprocess
+from datetime import datetime
 
 CONFIDENCE_THRESHOLD = 0.5
 TRIGGER_CLASSES = ['person', 'cat', 'dog', 'bird']
+from pijuice import PiJuice
 
+pj = PiJuice(1, 0)
 net = cv2.dnn_DetectionModel('motion/mobilenet_ssd.pb', 'motion/mobilenet_ssd.pbtxt')
 net.setInputSize(320, 320)
 net.setInputScale(1.0 / 127.5)
@@ -29,9 +33,16 @@ while True:
         for classId, confidence, box in zip(classIds.flatten(), confs.flatten(), bbox):
             label = classes[classId - 1]
             if label in TRIGGER_CLASSES:
-                print(f"Motion detected: {label}")
-                ts = time.strftime('%Y-%m-%d_%H-%M-%S')
+                ts = datetime.now().isoformat()
+                print(f"[Motion] {label} at {ts}")
                 image_path = f'/home/pi/timelapse/motion_{label}_{ts}.jpg'
                 cv2.imwrite(image_path, frame)
+                # Log to InfluxDB
+                line = f"motion_events,type={label} count=1"
+                requests.post("http://localhost:8086/write?db=plant_timelapse", data=line)
+                # Record video
+                subprocess.run(["/home/pi/timelapse/record_video.sh"])
+                # Send alerts
+                subprocess.run(["python3", "/home/pi/motion/send_telegram.py", f"Motion: {label} @ {ts}"])
                 requests.post("https://example.com/motion-alert", json={"type": label, "timestamp": ts})
     time.sleep(5)

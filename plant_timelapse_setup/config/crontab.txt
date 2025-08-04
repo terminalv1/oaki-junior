@@ -1,2 +1,0 @@
-*/5 * * * * /home/pi/timelapse/capture.sh
-0 0 * * * /home/pi/timelapse/backup.sh

@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "PiJuice Battery Dashboard",
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "gauge",
+        "title": "Battery Charge (%)",
+        "targets": [
+          {
+            "expr": "battery.charge",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        },
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 6,
+          "h": 6
+        }
+      },
+      {
+        "type": "gauge",
+        "title": "Battery Voltage (mV)",
+        "targets": [
+          {
+            "expr": "battery.vbat",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "volt",
+            "min": 3000,
+            "max": 4200
+          }
+        },
+        "gridPos": {
+          "x": 6,
+          "y": 0,
+          "w": 6,
+          "h": 6
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Power Input Type",
+        "targets": [
+          {
+            "expr": "battery.status",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {}
+        },
+        "gridPos": {
+          "x": 0,
+          "y": 6,
+          "w": 12,
+          "h": 3
+        }
+      }
+    ],
+    "schemaVersion": 30,
+    "version": 1
+  },
+  "overwrite": true
+}

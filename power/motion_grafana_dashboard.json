@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Plant Timelapse with Motion Events",
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Motion Events Over Time",
+        "targets": [
+          {
+            "measurement": "motion_events",
+            "groupBy": [
+              {
+                "type": "time",
+                "params": [
+                  "5m"
+                ]
+              },
+              {
+                "type": "tag",
+                "params": [
+                  "type"
+                ]
+              }
+            ],
+            "refId": "A"
+          }
+        ],
+        "xaxis": {
+          "mode": "time"
+        },
+        "yaxes": [
+          {
+            "format": "short"
+          },
+          {
+            "format": "short"
+          }
+        ],
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        }
+      },
+      {
+        "type": "piechart",
+        "title": "Motion Event Distribution",
+        "targets": [
+          {
+            "measurement": "motion_events",
+            "groupBy": [
+              {
+                "type": "tag",
+                "params": [
+                  "type"
+                ]
+              }
+            ],
+            "refId": "B"
+          }
+        ],
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 12,
+          "h": 6
+        }
+      }
+    ],
+    "schemaVersion": 30,
+    "version": 1
+  },
+  "overwrite": true
+}
