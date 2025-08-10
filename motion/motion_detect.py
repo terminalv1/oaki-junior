@@ -23,6 +23,7 @@ with open('motion/coco_labels.txt') as f:
 
 cap = cv2.VideoCapture(0)
 INFLUXDB_URL = os.environ.get("INFLUXDB_URL", "http://localhost:8086")
+MOTION_ALERT_URL = os.environ.get("MOTION_ALERT_URL", "https://example.com/motion-alert")
 
 while True:
     ret, frame = cap.read()
@@ -46,5 +47,5 @@ while True:
                 subprocess.run(["/home/pi/timelapse/record_video.sh"])
                 # Send alerts
                 subprocess.run(["python3", "/home/pi/motion/send_telegram.py", f"Motion: {label} @ {ts}"])
-                requests.post("https://example.com/motion-alert", json={"type": label, "timestamp": ts})
+                requests.post(MOTION_ALERT_URL, json={"type": label, "timestamp": ts})
     time.sleep(5)
