@@ -5,6 +5,7 @@ import time
 import requests
 import subprocess
 from datetime import datetime
+import os
 
 CONFIDENCE_THRESHOLD = 0.5
 TRIGGER_CLASSES = ['person', 'cat', 'dog', 'bird']
@@ -21,6 +22,7 @@ with open('motion/coco_labels.txt') as f:
     classes = [line.strip() for line in f.readlines()]
 
 cap = cv2.VideoCapture(0)
+INFLUXDB_URL = os.environ.get("INFLUXDB_URL", "http://localhost:8086")
 
 while True:
     ret, frame = cap.read()
@@ -39,7 +41,7 @@ while True:
                 cv2.imwrite(image_path, frame)
                 # Log to InfluxDB
                 line = f"motion_events,type={label} count=1"
-                requests.post("http://localhost:8086/write?db=plant_timelapse", data=line)
+                requests.post(f"{INFLUXDB_URL}/write?db=plant_timelapse", data=line)
                 # Record video
                 subprocess.run(["/home/pi/timelapse/record_video.sh"])
                 # Send alerts
